@@ -1,0 +1,382 @@
+{
+	"info": {
+		"_postman_id": "926ca3c2-9b5d-4036-afb1-e394d7a976d1",
+		"name": "Bank API Tests",
+		"description": "Collection of requests (valid & invalid) to test the Bank API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "37533112"
+	},
+	"item": [
+		{
+			"name": "Create Customer",
+			"item": [
+				{
+					"name": "Valid: Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alice\"  \n}"
+						},
+						"url": "http://localhost:3000/customers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Missing Name",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": "http://localhost:3000/customers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Empty Name",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer_id\":234\n  \"name\": \"   \"\n}"
+						},
+						"url": "http://localhost:3000/customers"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Account",
+			"item": [
+				{
+					"name": "Valid: Create Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": 1,\n  \"initial_deposit\": 500.00\n}"
+						},
+						"url": "http://localhost:3000/accounts"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Missing customer_id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"initial_deposit\": 500.00\n}"
+						},
+						"url": "http://localhost:3000/accounts"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Non-integer customer_id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": \"abc\",\n  \"initial_deposit\": 100.00\n}"
+						},
+						"url": "http://localhost:3000/accounts"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Negative initial_deposit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": 1,\n  \"initial_deposit\": -50.00\n}"
+						},
+						"url": "http://localhost:3000/accounts"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Customer Not Found",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": 9999,\n  \"initial_deposit\": 100.00\n}"
+						},
+						"url": "http://localhost:3000/accounts"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Balance",
+			"item": [
+				{
+					"name": "Valid: Get Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/accounts/1/balance"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Non-integer Account ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/accounts/abc/balance"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Account Not Found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/accounts/9999/balance"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transfer Funds",
+			"item": [
+				{
+					"name": "Valid: Transfer Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": 1,\n  \"to_account_id\": 2,\n  \"amount\": 50.00\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Missing Fields",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Same Account IDs",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": 1,\n  \"to_account_id\": 1,\n  \"amount\": 10.00\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Non-integer Account IDs",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": \"a\",\n  \"to_account_id\": \"b\",\n  \"amount\": 10.00\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Negative / Zero Amount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": 1,\n  \"to_account_id\": 2,\n  \"amount\": 0\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Insufficient Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": 1,\n  \"to_account_id\": 2,\n  \"amount\": 1000000.00\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Source Account Not Found",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": 9999,\n  \"to_account_id\": 2,\n  \"amount\": 10.00\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Destination Account Not Found",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"from_account_id\": 1,\n  \"to_account_id\": 9999,\n  \"amount\": 10.00\n}"
+						},
+						"url": "http://localhost:3000/transfers"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Transfer History",
+			"item": [
+				{
+					"name": "Valid: Get Transfer History",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:3000/transfers/1/history"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid: Non-integer Account ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/transfers/accounts/abc/history"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
